@@ -6,7 +6,7 @@ import pandas as pd
 import plotly.express as px
 
 # %%
-df_sobol = pd.read_csv("../sobolIndex.csv")
+df_sobol = pd.read_csv("../outputs/sobolIndex.csv")
 # %%
 df_sobol.plot.bar()
 
