@@ -176,4 +176,4 @@ X_test(1:2,:)
 %%
 Xval(1:2,:)
 %%
-a = Eval(Eval(:,1)<100,:)
+y = uq_evalModel(myLARS{2}, Xval)
