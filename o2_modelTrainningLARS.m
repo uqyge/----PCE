@@ -31,8 +31,8 @@ Yval = Eval(:, end); % Z23
 %%
 % PCE LARS
 st = 1;
-% n_samples = [100,200,300,500,1000,2000,4000,8000]-1;
-n_samples = [100, 200, 400, 1000, 2000] - 1;
+n_samples = [100, 200, 300, 500, 1000, 2000, 4000, 8000] - 1;
+% n_samples = [100, 200, 400, 1000, 2000] - 1;
 myLARS = cell(numel(n_samples), 1);
 disp('LARSº∆À„')
 
