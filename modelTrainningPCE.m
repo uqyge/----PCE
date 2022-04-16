@@ -29,12 +29,14 @@ Yval = Eval(:,end); % Z23
 % PCE LARS
 st = 1;
 n_samples = [100,200,300,500,1000,2000,4000,8000]-1;
-Order=3
+Order=6;
 
 err_val_table=zeros(numel(n_samples),Order);
 err_loo_table=zeros(numel(n_samples),Order);
-names_val = {}
-names_loo = {}
+names_val = {};
+names_loo = {};
+Y_tab = [];
+Y_tab=[Y_tab,Yval];
 for order=1:Order
     % n_samples = [100,200,400]-1;
     myLARS=cell(numel(n_samples),1);
@@ -62,47 +64,23 @@ for order=1:Order
     names_val = [names_val,['err_var_',num2str(order)]];
     names_loo = [names_loo,['err_loo_',num2str(order)]];
     uq_print(myLARS{end})
+    Y_tab=[Y_tab,uq_evalModel(myLARS{end}, Xval)];
 end
 disp('==================结束==========================')
 
 %%
 iter = n_samples.'+1;
 err = array2table(cat(2,iter,err_val_table,err_loo_table),'VariableNames',['iter',names_val,names_loo]);
-% writetable(err,['outputs/errPCE_',num2str(order),'.csv'])
-writetable(err,'outputs/errPCE_.csv')
+writetable(err,'outputs/errPCE.csv')
 
 %%
-f2 = uq_figure;
-method='LARS';
-YLARS=uq_evalModel(myLARS{end}, Xval);
-uq_plot(Yval, YLARS,'+');
-xlabel('Z23val');ylabel('Z23LARS')
-% figure
-corrcoef([Yval,YLARS])  % 相关系数
-axis equal
-title(sprintf('LARS-order%d', myLARS{end}.PCE.Basis.Degree))
+names_y = cell(1,1+Order);
+names_y{1}='eval';
+for i=1:Order
+    names_y{i+1}=['order_',num2str(i)];
+end
+r2_tab = array2table(Y_tab,'VariableNames',names_y);
+writetable(r2_tab,'outputs/r2PCE.csv')
+%%
+uq_plot(r2_tab.eval,r2_tab.order_1,'+')
 
-writetable(table(YLARS,Yval),['outputs/r2PCE_',num2str(order),'.csv'])
-%%
-writetable(table(iter),['outputs/errPCE_',num2str(order),'.csv'])
-%%
-a = cat(2,iter,err_val,err_loo);
-array2table(a,'VariableNames',{'a','b','c'})
-% writetable(table(a,'VariableNames',{'iter','err_val','err_loo'}),['outputs/errPCE_',num2str(order),'.csv'])
-%%
-
-iter = n_samples.'+1;
-cat(2,iter,err_loo_table,err_val_table)
-%%
-% table(cat(2,iter,err_val_table,err_loo_table),'VariableNames',{['iter',names_val,names_loo]}{1})
-
-%%
-cat(2,names_val,names_loo)
-%%
-
-%%
-
-%%
-['iter',names_val,names_loo]
-%%
-{'a','b'}
