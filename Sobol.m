@@ -14,7 +14,9 @@ end
 myInput = uq_createInput(Input);
 
 %%
-load('models')
+% load('models')
+load('.\outputs\larsModels')
+larsModel = myLARS{end};
 uq_print(larsModel)
 
 %%

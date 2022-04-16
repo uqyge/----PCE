@@ -35,6 +35,8 @@ err_val_table=zeros(numel(n_samples),Order);
 err_loo_table=zeros(numel(n_samples),Order);
 names_val = {};
 names_loo = {};
+names_y = cell(1,1+Order);
+names_y{1}='eval';
 Y_tab = [];
 Y_tab=[Y_tab,Yval];
 for order=1:Order
@@ -63,6 +65,7 @@ for order=1:Order
     end
     names_val = [names_val,['err_var_',num2str(order)]];
     names_loo = [names_loo,['err_loo_',num2str(order)]];
+    names_y{order+1}=['order_',num2str(order)];
     uq_print(myLARS{end})
     Y_tab=[Y_tab,uq_evalModel(myLARS{end}, Xval)];
 end
@@ -74,11 +77,7 @@ err = array2table(cat(2,iter,err_val_table,err_loo_table),'VariableNames',['iter
 writetable(err,'outputs/errPCE.csv')
 
 %%
-names_y = cell(1,1+Order);
-names_y{1}='eval';
-for i=1:Order
-    names_y{i+1}=['order_',num2str(i)];
-end
+
 r2_tab = array2table(Y_tab,'VariableNames',names_y);
 writetable(r2_tab,'outputs/r2PCE.csv')
 %%
