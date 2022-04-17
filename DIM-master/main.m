@@ -93,12 +93,13 @@ xinxi = cell(size(T4, 1), 18); %{'序号', 'n_step', '输入', '所有结点位移', '短绳
 output_data = zeros(size(T4, 1), 1 + 32 + 1);
 %%
 %alpha = 2e-3*20/100;
-alpha = -0.01;
+% alpha = -0.01;
+alpha = 0;
 figure
 
 %parfor nn = 1:size(T4, 1)
-parfor nn = 1:1000
-    % for nn = 1:10
+% parfor nn = 1:1000
+for nn = 1:1
     nn;
     NF_cable = zeros(nelem_cable, 1);
     dis1 = dis_0; dis0 = dis_0; % 预分配

@@ -7,7 +7,7 @@ import matplotlib.pylab as plt
 ser = 50 * np.random.rand() * np.random.normal(10, 10, 100) + 20
 
 # plot normed histogram
-plt.hist(ser, normed=True)
+plt.hist(ser, density=True)
 
 # find minimum and maximum of xticks, so we know
 # where we should compute theoretical distribution
@@ -19,6 +19,7 @@ lnspc = np.linspace(xmin, xmax, len(ser))
 m, s = stats.norm.fit(ser)  # get mean and standard deviation
 pdf_g = stats.norm.pdf(lnspc, m, s)  # now get theoretical values in our interval
 plt.plot(lnspc, pdf_g, label="Norm")  # plot it
+
 
 # exactly same as above
 ag, bg, cg = stats.gamma.fit(ser)
