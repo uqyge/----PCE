@@ -1,9 +1,9 @@
 clear;
 uqlab;
-rho_1000 = 8;
+rho_1000 = 4;
 k = 0.12;
-t = 1:10000;
-rho_t = rho_1000 * (t / 1000).^(k);
+t = 10000;
+rho_max = rho_1000 * (t / 1000).^(k);
 
 %%
 % Input Model
@@ -13,7 +13,7 @@ for i = 1:32
     Input.Marginals(i).Parameters = [rho_1000, k, 0, rho_1000];
 end
 
-opt = 0;
+opt = 2;
 
 if (opt ~= 0)
     Input.Marginals(opt).Parameters = [rho_1000, 0.19, 0, 0.5 * rho_1000];

@@ -3,7 +3,7 @@ clc;
 uqlab;
 %%
 % Input Model
-rho_1000 = 8;
+rho_1000 = 4;
 k = 0.12;
 
 for i=1:32
@@ -17,6 +17,7 @@ myInput = uq_createInput(Input);
 % load('models')
 load('.\outputs\larsModels')
 larsModel = myLARS{end};
+% larsModel = myPCE{end};
 uq_print(larsModel)
 
 %%

@@ -4,7 +4,7 @@ uqlab;
 
 %%
 % Input Model
-rho_1000 = 8; k = 0.12;
+rho_1000 = 4; k = 0.12;
 t = 1:10000;
 
 for i = 1:32
@@ -17,19 +17,21 @@ myInput = uq_createInput(Input);
 
 %%
 % 数据选择
-% load('output.mat')
-load('.\outputs\fem_out')
-% # range_y=[0, 0.1],
+load('.\outputs\output_input_k_12_rho1000_4_sobol_10000_opt_0')
+
 Train = output_data;
-Train = Train(Train(:, 1) < 100, 2:2 + 32);
+Train = Train(Train(:, 1) < 100, 2:1 + 32 + 3 + 1);
 
 Eval = Train(end - 2000:end, :); % 测试集
 
-Xval = Eval(:, 1:end - 1); % 输入T1,T32
-Yval = Eval(:, end); % Z23
+Xval = Eval(:, 1:32); % 输入T1,T32
+
+y_id = 36
+Yval = Eval(:, y_id); % Z23
 
 %%
 % PCE LARS
+qnorm = 0.75
 st = 1;
 n_samples = [100, 200, 300, 500, 1000, 2000, 4000, 8000] - 1;
 % n_samples = [100, 200, 400, 1000, 2000] - 1;
@@ -38,8 +40,8 @@ disp('LARS计算')
 
 for i = 1:numel(n_samples)
     intl = n_samples(i)
-    X_lars = Train(st:st + intl, 1:end - 1);
-    Y_lars = Train(st:st + intl, end);
+    X_lars = Train(st:st + intl, 1:32);
+    Y_lars = Train(st:st + intl, y_id);
 
     MetaOpts.Type = 'Metamodel';
     MetaOpts.MetaType = 'PCE';
@@ -47,7 +49,7 @@ for i = 1:numel(n_samples)
     MetaOpts.ExpDesign.X = X_lars;
     MetaOpts.ExpDesign.Y = Y_lars;
     MetaOpts.Degree = 1:10;
-    MetaOpts.TruncOptions.qNorm = 0.5;
+    MetaOpts.TruncOptions.qNorm = qnorm;
     MetaOpts.ValidationSet.X = Xval;
     MetaOpts.ValidationSet.Y = Yval;
     myLARS{i} = uq_createModel(MetaOpts);
@@ -67,8 +69,11 @@ for i = 1:numel(n_samples)
     err_loo = [err_loo; myLARS{i}.Error.LOO];
 end
 
-iter = n_samples.' + 1
-writetable(table(iter, err_val, err_loo), 'outputs/errLars.csv')
+suffix = ['_qnorm_', num2str(qnorm * 100), '_yid_', num2str(y_id)];
+
+iter = n_samples.' + 1;
+% writetable(table(iter, err_val, err_loo), ['outputs/errLars_qnorm_', num2str(qnorm * 100), '_yid_', num2str(y_id), '.csv'])
+writetable(table(iter, err_val, err_loo), ['outputs/errLars', suffix, '.csv'])
 
 %%
 f2 = uq_figure;
@@ -80,8 +85,9 @@ xlabel('Z23val'); ylabel('Z23LARS')
 corrcoef([Yval, YLARS]) % 相关系数
 axis equal
 title(sprintf('LARS-order%d', myLARS{end}.PCE.Basis.Degree))
-writetable(table(YLARS, Yval), 'outputs/r2Lars.csv')
+% writetable(table(YLARS, Yval), ['outputs/r2Lars_qnorm_', num2str(qnorm * 100), '_yid_', num2str(y_id), '.csv'])
+writetable(table(YLARS, Yval), ['outputs/r2Lars', suffix, '.csv'])
 %%
-save('outputs/larsModels.mat', 'myLARS')
+save(['outputs/larsModels', suffix], 'myLARS')
 
 %%

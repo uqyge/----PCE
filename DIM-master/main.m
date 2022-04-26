@@ -4,8 +4,9 @@ clc
 %%
 %XX = ones(1000,32)*20
 % load('input_k012.mat')
-filename = 'input_k_12_rho1000_8_sobol_10000';
-% filename = 'input_k_19_rho1000_4sobol_10000';
+filename = 'input_k_12_rho1000_4_sobol_10000_opt_0';
+% filename = 'input_k_12_rho1000_4_sobol_10000_opt_1';
+% filename = 'input_k_12_rho1000_4_sobol_10000_opt_2';
 load(filename);
 XX = input_rho;
 
@@ -90,16 +91,16 @@ dis_0 = dis2;
 T4 = XX;
 % T4 = T4(1:20, :);
 xinxi = cell(size(T4, 1), 18); %{'序号', 'n_step', '输入', '所有结点位移', '短绳应力', '画图信息'}
-output_data = zeros(size(T4, 1), 1 + 32 + 1);
+output_data = zeros(size(T4, 1), 1 + 32 + 3 + 1);
 %%
 %alpha = 2e-3*20/100;
-% alpha = -0.01;
-alpha = 0;
+alpha = -0.01;
+% alpha = 0;
 figure
 
-%parfor nn = 1:size(T4, 1)
-% parfor nn = 1:1000
-for nn = 1:1
+parfor nn = 1:size(T4, 1)
+    % parfor nn = 1:1000
+    % for nn = 1:1
     nn;
     NF_cable = zeros(nelem_cable, 1);
     dis1 = dis_0; dis0 = dis_0; % 预分配
@@ -107,8 +108,9 @@ for nn = 1:1
     act_pct = 0.1 * ones(1, 4);
 
     [epsilon_cable_temp0] ...
-        = alpha * T4(nn, :); % = 0*T4(nn,:); = 0*ones(1,32);
-
+        = alpha * T4(nn, :);
+    %      [epsilon_cable_temp0] ...
+    %          = alpha *ones(1,32)*4;
     for load_step = 1:Num_load
 
         load_step;
@@ -213,8 +215,8 @@ for nn = 1:1
 
     %    disp(n_step);
 
-    %     [nod_now0] = Disposal_grid2(nnode, nod, m, n, nelem_spring, nelem_bar, ...
-    %     nelem_cable, cluster, ele_spring, ele_bar, ele_cable, ele_cluster, dis1);
+    %         [nod_now0] = Disposal_grid2(nnode, nod, m, n, nelem_spring, nelem_bar, ...
+    %         nelem_cable, cluster, ele_spring, ele_bar, ele_cable, ele_cluster, dis1);
 
     [nod_now] = nod_now_result(nnode, nod, m, n, nelem_spring, nelem_bar, ...
     nelem_cable, cluster, ele_spring, ele_bar, ele_cable, ele_cluster, dis1);
@@ -239,7 +241,13 @@ for nn = 1:1
             nelem_cable, cluster, ele_spring, ele_bar, ele_cable, ele_cluster, dis1};
 
     xinxi(nn, :) = [{nn, n_step, data_c, dis_now, stress_cable}, huatu];
-    output_data(nn, :) = [n_step, data_c, dis_z];
+    xo = -21.6;
+    yo = -31.1;
+    zo = 53.9;
+    esp = sqrt((dis_23x - xo)^2 + (dis_23y - yo)^2 + (dis_23z - zo)^2);
+    %     output_data(nn, :) = [n_step, data_c, dis_z];
+    %     output_data(nn, :) = [n_step, data_c, esp];
+    output_data(nn, :) = [n_step, data_c, dis_23x, dis_23y, dis_23z, esp];
     %==========================================================================
     %==========================================================================
     %==========================================================================
