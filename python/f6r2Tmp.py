@@ -3,10 +3,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-plt.rcParams["figure.dpi"] = 600
-plt.rcParams["savefig.dpi"] = 600
-# plt.rcParams["font.sans-serif"] = ["SimSun"]
-plt.rcParams["axes.unicode_minus"] = True
+def cm_to_inch(value):
+    return value / 2.54
 
 
 # %%
@@ -37,25 +35,34 @@ plt.plot(x, y, "ko", label="LARS")
 plt.xlabel("pce prediction")
 plt.ylabel("test values")
 plt.legend()
-plt.savefig("../figures/r2.tiff")
+plt.savefig("../figures/r2.png")
 
 
 # %%
-plt.figure(figsize=(5, 5))
-x = df_r2_pce["eval"]
-y = df_r2_pce["order_2"]
-# plt.subplot(2, 1, 1)
-plt.plot(x, y, "ko")
-plt.xlabel("pce prediction")
-plt.ylabel("test values")
-
-# %%
-plt.figure(figsize=(5, 5))
-plt.xlabel("pce prediction")
-plt.ylabel("test values")
+plt.figure(figsize=(cm_to_inch(7), cm_to_inch(7)), dpi=600)
+plt.rc("font", family="Times New Roman")
+plt.rc("font", size=8)
+plt.xlabel("LARS prediction")
+plt.ylabel("FEM simulatons")
 x = df_r2_lars_50.YLARS
 y = df_r2_lars_50.Yval
 
-plt.plot(x, y, "ko")
+plt.plot(x, y, "ko", markersize=2)
+plt.tight_layout()
+plt.savefig("../figures/r2Lars.tiff")
+
+# %%
+plt.figure(figsize=(cm_to_inch(7), cm_to_inch(7)), dpi=600)
+plt.rc("font", family="Times New Roman")
+plt.rc("font", size=8)
+plt.xlabel("2nd order PCE prediction")
+plt.ylabel("FEM simulatons")
+
+x = df_r2_pce["eval"]
+y = df_r2_pce["order_2"]
+
+plt.plot(x, y, "ko", markersize=2)
+plt.tight_layout()
+plt.savefig("../figures/r2pce.tiff")
 
 # %%

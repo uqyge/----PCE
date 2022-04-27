@@ -3,7 +3,7 @@ clc;
 uqlab;
 %%
 % Input Model
-rho_1000 = 8;
+rho_1000 = 4;
 k = 0.12;
 
 for i = 1:32
@@ -15,7 +15,9 @@ end
 myInput = uq_createInput(Input);
 
 %%
-load('.\outputs\larsModels')
+% load('.\outputs\larsModels')
+file = '.\outputs\larsModels_qnorm_50_yid_36'
+load(file);
 larsModel = myLARS{end}
 uq_print(larsModel)
 
@@ -25,6 +27,7 @@ x_org = uq_getSample(myInput, 10000, 'Sobol');
 y = uq_evalModel(larsModel, x_org);
 
 %%
+figure()
 histogram(y)
 %%
 for i = 1:32

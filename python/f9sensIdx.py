@@ -20,7 +20,7 @@ df_sobol_sort = df_sobol.sort_values(by="FirstOrder", ascending=False)[:12]
 labels = df_sobol_sort.index
 x = np.arange(len(labels))
 width = 0.4
-
+plt.figure(figsize=(5, 5))
 fig, ax = plt.subplots()
 rects1 = ax.bar(x - width / 2, df_sobol_sort.FirstOrder, width, edgecolor="k")
 # rects2 = ax.bar(x + width / 2, df_sobol_sort.TotalOrder, width, color="k")
