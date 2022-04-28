@@ -7,12 +7,6 @@ def cm_to_inch(value):
     return value / 2.54
 
 
-#%%
-# plt.rcParams["figure.dpi"] = 600
-# plt.rcParams["savefig.dpi"] = 600
-# plt.rcParams["font.sans-serif"] = ["SimSun"]
-plt.rcParams["axes.unicode_minus"] = True
-
 # %%
 df_err_lars_25 = pd.read_csv("../outputs/errLars_qnorm_25_yid_36.csv")
 df_err_lars_50 = pd.read_csv("../outputs/errLars_qnorm_50_yid_36.csv")
@@ -34,8 +28,8 @@ plt.legend()
 plt.figure(figsize=(cm_to_inch(8), cm_to_inch(6)), dpi=600)
 plt.rc("font", family="Times New Roman")
 plt.rc("font", size=8)
-plt.xlim([0, 10_000])
-plt.ylim([2e-4, 8000])
+plt.rc("lines", linewidth=0.5)
+
 plt.semilogy(
     df_err_pce.iter, df_err_pce.err_var_3, "--v", label="3rd order PCE", markersize=3
 )
@@ -50,18 +44,24 @@ plt.semilogy(
     df_err_lars_50.iter, df_err_lars_50.err_val, "d-", label="LARS PCE", markersize=3
 )
 
-plt.xticks([0, 2000, 4000, 6000, 8000], fontsize=8)
-plt.yticks([1e-4, 1e-2, 1e-0, 1e2], fontsize=8)
+plt.xlim([0, 9_000])
+plt.ylim([2e-4, 6000])
+plt.xticks([0, 2000, 4000, 6000, 8000])
+plt.yticks([1e-4, 1e-2, 1e-0, 1e2])
 plt.ylabel("error")
-plt.xlabel("samples", fontsize=8)
+plt.xlabel("samples")
 plt.legend(
     ["3rd order PCE", "2nd order PCE", "1st order PCE", "LARS PCE"],
-    fontsize=8,
     frameon=False,
+    fontsize=7,
 )
 
 plt.tight_layout()
 plt.savefig("../figures/errhist.tiff")
 
 
+# %%
+df_err_lars_50
+# %%
+df_err_pce
 # %%

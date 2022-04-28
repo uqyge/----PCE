@@ -5,8 +5,8 @@ clc
 %XX = ones(1000,32)*20
 % load('input_k012.mat')
 % filename = 'input_k_12_rho1000_4_sobol_10000_opt_0';
-filename = 'input_k_12_rho1000_4_sobol_10000_opt_1';
-% filename = 'input_k_12_rho1000_4_sobol_10000_opt_2';
+% filename = 'input_k_12_rho1000_4_sobol_10000_opt_1';
+filename = 'input_k_12_rho1000_4_sobol_10000_opt_2';
 load(filename);
 XX = input_rho;
 

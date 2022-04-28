@@ -2,11 +2,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-# plt.rcParams["figure.dpi"] = 600
-# plt.rcParams["savefig.dpi"] = 600
-# plt.rcParams["font.sans-serif"] = ["SimSun"]
-plt.rcParams["axes.unicode_minus"] = True
-
 
 def cm_to_inch(value):
     return value / 2.54
@@ -31,16 +26,20 @@ def c3(x):
 
 
 # %%
-fontdict = {"family": "Times New Roman", "size": 8}
 x = np.linspace(0.1, 0.3, 100)
-plt.figure(figsize=(cm_to_inch(8), cm_to_inch(6)), dpi=600)
+
 plt.rc("font", family="Times New Roman")
-plt.rcParams["font.sans-serif"] = "Times"
+plt.rc("font", size=8)
+plt.rc("lines", linewidth=0.5)
+
+plt.figure(figsize=(cm_to_inch(8), cm_to_inch(6)), dpi=600)
+
+
 plt.xlim([0, 0.33])
 plt.ylim([0, 12])
-plt.plot(x, c1(x), "k")
-plt.plot(x, c2(x), "k")
-plt.plot(x, c3(x), "k")
+plt.plot(x, c1(x), "k", linewidth=0.75)
+plt.plot(x, c2(x), "k", linewidth=0.75)
+plt.plot(x, c3(x), "k", linewidth=0.75)
 plt.plot(np.ones(10) * 0.1, np.linspace(0, 12, 10), "k--")
 plt.plot(np.ones(10) * 0.2, np.linspace(0, 12, 10), "k--")
 plt.plot(np.ones(10) * 0.3, np.linspace(0, 12, 10), "k--")
@@ -52,10 +51,9 @@ plt.xlabel("$\sigma_{po}$/$f_{ptk}$", fontsize=8)
 plt.annotate("Class 1", xy=(0.23, 10.5), fontsize=8)
 plt.annotate("Class 2", xy=(0.23, 5.5), fontsize=8)
 plt.annotate("Class 3", xy=(0.23, 3), fontsize=8)
+
 plt.tight_layout()
 plt.savefig("../figures/class.tiff", facecolor="w")
 
 # plt.savefig("../figures/class.png")
-# %%
-plt.get_facecolor()
-# %%
+#%%

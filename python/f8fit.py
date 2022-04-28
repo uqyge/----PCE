@@ -5,15 +5,13 @@ import scipy.stats as stats
 from scipy.special import kl_div
 import numpy as np
 
-plt.rcParams["figure.dpi"] = 600
-plt.rcParams["savefig.dpi"] = 600
-# plt.rcParams["font.sans-serif"] = ["SimSun"]
-plt.rcParams["axes.unicode_minus"] = True
+
+def cm_to_inch(value):
+    return value / 2.54
+
+
 # %%
-df_r2_lars_25 = pd.read_csv("../outputs/r2Lars_qnorm_25_yid_36.csv")
 df_r2_lars_50 = pd.read_csv("../outputs/r2Lars_qnorm_50_yid_36.csv")
-df_r2_lars_75 = pd.read_csv("../outputs/r2Lars_qnorm_75_yid_36.csv")
-df_r2_lars_95 = pd.read_csv("../outputs/r2Lars_qnorm_95_yid_36.csv")
 df_r2_lars_50.head()
 
 #%%
@@ -24,6 +22,12 @@ x_l, x_u = min(xt), max(xt)
 x_test = np.linspace(x_l, x_u, 100)
 
 # %%
+
+plt.figure(figsize=(cm_to_inch(8), cm_to_inch(6)), dpi=600)
+plt.rc("font", family="Times New Roman")
+plt.rc("font", size=8)
+plt.rc("lines", linewidth=0.5)
+
 hist = plt.hist(
     y,
     20,
@@ -63,9 +67,32 @@ pdf_g = stats.logistic.pdf(x_test, m, s)
 d_kl = sum(kl_div(y_kl, stats.logistic.pdf(x_kl, m, s)))
 plt.plot(x_test, pdf_g, "k", label=f"一二三logistic {d_kl=}")
 
-plt.legend(["model prediction", "logitic distribution estimation"], loc=2)
-# plt.legend()
-plt.ylim([0, 0.29])
-plt.xlabel("distance /mm")
-plt.savefig("../figures/mle.tiff")
+plt.legend(["LARS", "logitic distribution"], loc=2, frameon=False)
+
 #%%
+plt.figure(figsize=(cm_to_inch(8), cm_to_inch(6)), dpi=600)
+plt.rc("font", family="Times New Roman")
+plt.rc("font", size=8)
+plt.rc("lines", linewidth=0.5)
+
+plt.plot(x_test, pdf_g, "k", linewidth=0.75)
+plt.hist(
+    y,
+    20,
+    density=True,
+    label="histogram",
+    histtype="bar",
+    linewidth=1,
+    # hatch="//",
+    edgecolor="k",
+    align="mid",
+    # color="w",
+)
+plt.xlabel("distance/cm")
+plt.ylabel("density")
+plt.legend(["logitic distribution", "LARS"], loc=2, frameon=False)
+plt.ylim([0, 0.29])
+# plt.yticks([0, 0.1, 0.2])
+plt.tight_layout()
+plt.savefig("../figures/mle.tiff")
+# %%
